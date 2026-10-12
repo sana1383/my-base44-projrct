@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="املاک افق">
+  <rect width="32" height="32" rx="7" fill="#0B1B2B" />
+  <path d="M5.5 22.5V13.6L16 8l10.5 5.6v8.9" fill="none" stroke="#C2A165" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M12.6 22.5v-5.6h6.8v5.6" fill="none" stroke="#C2A165" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+</svg>

@@ -1,0 +1,79 @@
+/* ============================================================
+   Design tokens — Horizon Properties
+   Palette: deep architectural navy · warm ivory · champagne accent
+   ============================================================ */
+:root {
+  /* ---- core palette ---- */
+  --navy-950: #07131f;
+  --navy-900: #0b1b2b;
+  --navy-800: #102437;
+  --navy-700: #17324a;
+  --navy-600: #204663;
+  --ink: #0e1e2e;
+  --ink-2: #46586a;
+  --muted: #7c8288;
+
+  --ivory: #f8f5f0;
+  --ivory-100: #f4efe8;
+  --ivory-200: #ede5d9;
+  --sand: #dcd2c1;
+
+  --champagne: #b8935a;
+  --champagne-300: #d3ba8b;
+  --champagne-100: #ece0c9;
+
+  --white: #ffffff;
+  --bg-soft: #edf1f4;
+
+  --line: rgba(14, 30, 46, 0.1);
+  --line-2: rgba(14, 30, 46, 0.17);
+  --line-invert: rgba(255, 255, 255, 0.15);
+
+  /* ---- typography ---- */
+  --font: 'Vazirmatn', 'Segoe UI', Tahoma, system-ui, -apple-system, sans-serif;
+  --fs-hero: clamp(2rem, 1.05rem + 4.1vw, 4.4rem);
+  --fs-h1: clamp(1.85rem, 1.1rem + 2.9vw, 3.25rem);
+  --fs-h2: clamp(1.5rem, 1.05rem + 1.9vw, 2.45rem);
+  --fs-h3: clamp(1.12rem, 1rem + 0.6vw, 1.45rem);
+  --fs-body: clamp(0.95rem, 0.92rem + 0.14vw, 1.04rem);
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.8rem;
+  --fs-label: 0.78rem;
+
+  /* Persian script needs looser leading than Latin; letter-spacing is
+     never applied to Persian text because it breaks glyph connections. */
+  --lh-tight: 1.42;
+  --lh-body: 1.95;
+
+  /* ---- layout ---- */
+  --container: 1240px;
+  --container-narrow: 880px;
+  --gutter: clamp(20px, 4.6vw, 56px);
+  --section-y: clamp(64px, 7.6vw, 128px);
+  --section-y-sm: clamp(48px, 5.5vw, 88px);
+  --header-h: 76px;
+
+  /* ---- radii ---- */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 30px;
+  --radius-pill: 999px;
+
+  /* ---- elevation ---- */
+  --shadow-xs: 0 1px 2px rgba(14, 30, 46, 0.06);
+  --shadow-sm: 0 8px 22px -12px rgba(14, 30, 46, 0.22);
+  --shadow: 0 20px 44px -26px rgba(14, 30, 46, 0.34);
+  --shadow-lg: 0 34px 74px -34px rgba(7, 19, 31, 0.5);
+
+  /* ---- motion ---- */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 0.45s;
+  --dur-slow: 0.75s;
+
+  --z-header: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+}
