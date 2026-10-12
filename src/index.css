@@ -176,15 +176,16 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.05;
   margin: 0 auto;
   padding: 0 var(--gutter);
   height: 76px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 24px;
 }
 .logo {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-self: start;
   line-height: 1;
   cursor: pointer;
   flex-shrink: 0;
@@ -209,7 +210,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.05;
 .nav {
   display: flex;
   align-items: center;
-  gap: 36px;
+  justify-self: center;
+  gap: 32px;
 }
 .nav__link {
   font-size: 0.82rem;
@@ -238,7 +240,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.05;
 .header__right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  justify-self: end;
+  gap: 18px;
   flex-shrink: 0;
 }
 .icon-btn {
@@ -374,8 +377,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.05;
   line-height: 1.6;
   max-width: 38ch;
   margin-bottom: 36px;
-  color: var(--espresso);
-  opacity: 0.75;
+  color: rgba(36, 25, 20, 0.72);
   opacity: 0;
   animation: fadeUp 0.8s var(--ease) 0.6s forwards;
 }
@@ -478,12 +480,11 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.05;
   background: var(--warm-ivory);
 }
 .menu-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: 24px 64px;
   margin-bottom: 48px;
-  flex-wrap: wrap;
 }
 .menu-header__left { max-width: 560px; }
 .menu-header__label { margin-bottom: 14px; }
@@ -491,13 +492,19 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.05;
   font-size: clamp(2.2rem, 4.5vw, 3.8rem);
   font-weight: 500;
   letter-spacing: -0.01em;
-  margin-bottom: 14px;
+}
+.menu-header__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 26px;
+  padding-bottom: 6px;
 }
 .menu-header__sub {
   font-size: 0.95rem;
-  line-height: 1.6;
+  line-height: 1.65;
   opacity: 0.7;
-  max-width: 46ch;
+  max-width: 44ch;
 }
 
 .menu-filters {
@@ -585,7 +592,9 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.05;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12px;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 16px;
 }
 .product-card__price {
   font-size: 1rem;
@@ -611,8 +620,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.05;
    ============================================ */
 .story {
   display: grid;
-  grid-template-columns: 1fr 1.2fr 0.8fr;
-  min-height: 600px;
+  grid-template-columns: 0.9fr 1.35fr 0.75fr;
+  min-height: clamp(540px, 58vw, 760px);
 }
 .story__left {
   background: var(--dark-charcoal);
@@ -708,7 +717,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.05;
   padding: 0 var(--gutter);
 }
 .value {
-  padding: clamp(40px, 5vw, 64px) clamp(20px, 2.5vw, 32px);
+  padding: clamp(34px, 3.6vw, 48px) clamp(18px, 2.5vw, 32px);
   text-align: center;
   border-right: 1px solid var(--soft-border);
   transition: background var(--dur) var(--ease);
@@ -716,8 +725,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.05;
 .value:last-child { border-right: none; }
 .value:hover { background: rgba(217, 197, 175, 0.15); }
 .value__icon {
-  width: 44px; height: 44px;
-  margin: 0 auto 18px;
+  width: 38px; height: 38px;
+  margin: 0 auto 15px;
   color: var(--coffee-brown);
 }
 .value__icon svg { width: 100%; height: 100%; }
@@ -737,7 +746,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.05;
    FOOTER
    ============================================ */
 .footer {
-  background: var(--dark-charcoal);
+  background: var(--espresso);
   color: var(--warm-white);
   padding: clamp(56px, 8vw, 100px) 0 0;
 }
@@ -1176,7 +1185,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.05;
   .stats { flex-wrap: wrap; gap: 16px; padding: 24px var(--gutter); }
   .stat { flex: 1 1 30%; padding: 8px; }
   .stat-divider { display: none; }
-  .menu-header { flex-direction: column; align-items: flex-start; }
+  .menu-header { grid-template-columns: 1fr; gap: 24px; align-items: start; }
+  .menu-header__right { align-items: flex-start; padding-bottom: 0; }
   .footer__top { grid-template-columns: 1fr; gap: 40px; }
   .footer__social { align-items: flex-start; }
   .footer__bottom { flex-direction: column; text-align: center; }

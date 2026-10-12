@@ -16,15 +16,17 @@ export default function Menu({ onAdd, onOpen }) {
           <div className="menu-header__left">
             <div className="eyebrow menu-header__label">Our Menu</div>
             <h2 className="menu-header__title">Seasonal favourites.</h2>
+          </div>
+          <div className="menu-header__right">
             <p className="menu-header__sub">
               Crafted with care, using the finest ingredients. From bold classics to unique seasonal
               creations, there's something for every coffee lover.
             </p>
+            <button className="btn btn--ghost" onClick={() => onOpen('fullmenu')}>
+              View Full Menu
+              <ArrowRight className="arrow" width="16" height="16" />
+            </button>
           </div>
-          <button className="btn btn--ghost" onClick={() => onOpen('fullmenu')}>
-            View Full Menu
-            <ArrowRight className="arrow" width="16" height="16" />
-          </button>
         </div>
 
         <div className="menu-filters" role="tablist" aria-label="Filter menu by category">

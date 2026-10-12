@@ -29,7 +29,9 @@ Vite dev server binds 0.0.0.0 with live reload.
 ## Design Tokens
 Defined in `:root` in `src/index.css`:
 - Warm ivory `#F5EFE5`, Cream `#EFE5D8`, Coffee brown `#79513A`, Espresso `#241914`
-- Dark charcoal `#1B1916` (story panel + footer), Soft border `#D8CBBE`
+- Dark charcoal `#1B1916` (story panel), Espresso `#241914` (footer), Soft border `#D8CBBE`
+- Header is a 3-column grid (`1fr auto 1fr`) so the nav sits optically centered on desktop
+- Menu header is a 2-column grid: title left, supporting copy + "View Full Menu" right (stacks under 860px)
 
 ## Features
 - Smooth-scroll navigation with active section tracking
