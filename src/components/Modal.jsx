@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 // Reusable modal wrapper: handles Escape, backdrop click, body scroll lock, focus
-export default function Modal({ open, onClose, title, children, wide = false, closeLabel = 'Close' }) {
+export default function Modal({ open, onClose, title, children, wide = false, closeLabel = 'بستن' }) {
   const closeRef = useRef(null)
 
   useEffect(() => {

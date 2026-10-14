@@ -1,14 +1,14 @@
 import { Fragment } from 'react'
 
 const stats = [
-  { num: '10K+', label: 'Happy Customers' },
-  { num: '4.8 ★', label: 'Average Rating' },
-  { num: '3', label: 'Locations' },
+  { num: '10K+', label: 'مشتری راضی' },
+  { num: '4.8 ★', label: 'میانگین امتیاز' },
+  { num: '3', label: 'شعبه' },
 ]
 
 export default function Stats() {
   return (
-    <div className="stats" aria-label="Brand statistics" role="list">
+    <div className="stats" aria-label="آمار برند" role="list">
       {stats.map((s, i) => (
         <Fragment key={s.label}>
           <div className="stat" role="listitem">

@@ -20,7 +20,7 @@ export default function ProductCard({ item, onAdd }) {
           <button
             className="add-btn"
             onClick={() => onAdd(item)}
-            aria-label={`Add ${item.name} to cart`}
+            aria-label={`افزودن ${item.name} به سبد خرید`}
           >
             <PlusIcon />
           </button>

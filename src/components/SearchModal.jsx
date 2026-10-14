@@ -25,23 +25,23 @@ export default function SearchModal({ open, onClose, onAdd }) {
     : menuItems.slice(0, 6)
 
   return (
-    <Modal open={open} onClose={onClose} title="Search Menu" wide>
+    <Modal open={open} onClose={onClose} title="جست‌وجو" wide>
       <div className="search-input-wrap">
         <SearchIcon className="search-icon" />
         <input
           ref={inputRef}
           className="search-input"
           type="text"
-          placeholder="Search by name or category..."
+          placeholder="عبارت موردنظر را وارد کنید"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          aria-label="Search menu items"
+          aria-label="جست‌وجو در منو"
         />
       </div>
 
       {results.length === 0 ? (
         <div className="search-empty">
-          <p>No products match "{query}".</p>
+          <p>نتیجه‌ای یافت نشد.</p>
         </div>
       ) : (
         <div className="search-results">
@@ -50,9 +50,11 @@ export default function SearchModal({ open, onClose, onAdd }) {
               <img className="search-result__img" src={item.image} alt={item.name} />
               <div style={{ flex: 1 }}>
                 <div className="search-result__name">{item.name}</div>
-                <div className="search-result__desc">{item.description} — ${item.price.toFixed(2)}</div>
+                <div className="search-result__desc">
+                  {item.description} — <bdi dir="ltr">${item.price.toFixed(2)}</bdi>
+                </div>
               </div>
-              <button className="add-btn" onClick={() => onAdd(item)} aria-label={`Add ${item.name} to cart`}>
+              <button className="add-btn" onClick={() => onAdd(item)} aria-label={`افزودن ${item.name} به سبد خرید`}>
                 <PlusIcon />
               </button>
             </div>

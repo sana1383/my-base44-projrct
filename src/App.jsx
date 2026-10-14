@@ -31,7 +31,7 @@ export default function App() {
       }
       return [...prev, { ...item, quantity: 1 }]
     })
-    setToast(`${item.name} added to your order`)
+    setToast(`${item.name} به سبد خرید اضافه شد.`)
     clearTimeout(toastTimer.current)
     toastTimer.current = setTimeout(() => setToast(null), 2500)
   }, [])
@@ -84,7 +84,7 @@ export default function App() {
 
   return (
     <>
-      <a href="#hero" className="skip-link">Skip to content</a>
+      <a href="#hero" className="skip-link">پرش به محتوا</a>
 
       <Header
         cartCount={cartCount}

@@ -8,8 +8,8 @@ export default function FullMenuModal({ open, onClose, onAdd }) {
   const visible = filter === 'all' ? menuItems : menuItems.filter((i) => i.category === filter)
 
   return (
-    <Modal open={open} onClose={onClose} title="Full Menu" wide>
-      <div className="menu-filters" role="tablist" aria-label="Filter menu by category">
+    <Modal open={open} onClose={onClose} title="منوی کامل" wide>
+      <div className="menu-filters" role="tablist" aria-label="فیلتر منو بر اساس دسته‌بندی">
         {menuFilters.map((f) => (
           <button
             key={f.key}

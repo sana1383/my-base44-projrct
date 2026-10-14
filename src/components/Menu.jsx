@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ProductCard from './ProductCard.jsx'
 import { menuItems, menuFilters } from '../data/menuItems.js'
-import { ArrowRight } from './Icons.jsx'
+import { ArrowLeft } from './Icons.jsx'
 
 export default function Menu({ onAdd, onOpen }) {
   const [filter, setFilter] = useState('all')
@@ -14,22 +14,22 @@ export default function Menu({ onAdd, onOpen }) {
       <div className="container">
         <div className="menu-header">
           <div className="menu-header__left">
-            <div className="eyebrow menu-header__label">Our Menu</div>
-            <h2 className="menu-header__title">Seasonal favourites.</h2>
+            <div className="eyebrow menu-header__label">منوی ما</div>
+            <h2 className="menu-header__title">طعم‌های محبوب فصل</h2>
           </div>
           <div className="menu-header__right">
             <p className="menu-header__sub">
-              Crafted with care, using the finest ingredients. From bold classics to unique seasonal
-              creations, there's something for every coffee lover.
+              با دقت و از بهترین مواد اولیه تهیه شده‌اند. از قهوه‌های کلاسیک تا طعم‌های خاص فصلی،
+              برای هر سلیقه‌ای انتخابی دل‌نشین داریم.
             </p>
             <button className="btn btn--ghost" onClick={() => onOpen('fullmenu')}>
-              View Full Menu
-              <ArrowRight className="arrow" width="16" height="16" />
+              مشاهده منوی کامل
+              <ArrowLeft className="arrow" width="16" height="16" />
             </button>
           </div>
         </div>
 
-        <div className="menu-filters" role="tablist" aria-label="Filter menu by category">
+        <div className="menu-filters" role="tablist" aria-label="فیلتر منو بر اساس دسته‌بندی">
           {menuFilters.map((f) => (
             <button
               key={f.key}

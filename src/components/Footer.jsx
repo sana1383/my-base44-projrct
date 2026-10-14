@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { InstagramIcon, TikTokIcon, PinterestIcon, SpotifyIcon, ArrowRight } from './Icons.jsx'
+import { InstagramIcon, TikTokIcon, PinterestIcon, SpotifyIcon, ArrowLeft } from './Icons.jsx'
 
 const socials = [
   { icon: InstagramIcon, label: 'Instagram', href: '#' },
@@ -15,15 +15,15 @@ export default function Footer({ onOpen }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!email.trim()) {
-      setMsg({ type: 'err', text: 'Please enter your email address.' })
+      setMsg({ type: 'err', text: 'لطفاً این فیلد را تکمیل کنید.' })
       return
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setMsg({ type: 'err', text: 'Please enter a valid email address.' })
+      setMsg({ type: 'err', text: 'لطفاً یک آدرس ایمیل معتبر وارد کنید.' })
       return
     }
     // Frontend demonstration — no backend newsletter integration configured.
-    setMsg({ type: 'ok', text: "Thank you for subscribing! We'll be in touch soon." })
+    setMsg({ type: 'ok', text: 'عضویت شما با موفقیت ثبت شد. به‌زودی با شما در تماس خواهیم بود.' })
     setEmail('')
   }
 
@@ -35,23 +35,24 @@ export default function Footer({ onOpen }) {
             <span className="logo__main">HARTH</span>
             <span className="logo__sub">COFFEE</span>
           </div>
-          <p className="footer__tagline">A<br />WARMER<br />TOMORROW.</p>
+          <p className="footer__tagline">فردایی<br />گرم‌تر.</p>
         </div>
 
         <div className="newsletter">
-          <h3>Join our newsletter</h3>
-          <p>Be the first to know about new drinks, events and more.</p>
+          <h3>عضو خبرنامه ما شوید</h3>
+          <p>از نوشیدنی‌های جدید، رویدادها و تازه‌ترین خبرهای ما زودتر باخبر شوید.</p>
           <form className="newsletter__form" onSubmit={handleSubmit} noValidate>
             <input
               className="newsletter__input"
               type="email"
-              placeholder="Your email address"
+              dir="ltr"
+              placeholder="آدرس ایمیل شما"
               value={email}
               onChange={(e) => { setEmail(e.target.value); setMsg(null) }}
-              aria-label="Email address for newsletter"
+              aria-label="آدرس ایمیل برای عضویت در خبرنامه"
             />
-            <button className="newsletter__submit" type="submit" aria-label="Subscribe to newsletter">
-              <ArrowRight width="18" height="18" />
+            <button className="newsletter__submit" type="submit" aria-label="ثبت عضویت">
+              <ArrowLeft width="18" height="18" />
             </button>
           </form>
           {msg && (
@@ -73,11 +74,11 @@ export default function Footer({ onOpen }) {
       </div>
 
       <div className="footer__bottom">
-        <span>© 2026 Harth Coffee. All rights reserved.</span>
+        <span><bdi dir="ltr">© 2026 HARTH COFFEE</bdi> — تمامی حقوق محفوظ است.</span>
         <div className="footer__bottom-links">
-          <a href="#" onClick={(e) => e.preventDefault()}>Privacy</a>
-          <a href="#" onClick={(e) => e.preventDefault()}>Terms</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); onOpen('reservation') }}>Contact</a>
+          <a href="#" onClick={(e) => e.preventDefault()}>حریم خصوصی</a>
+          <a href="#" onClick={(e) => e.preventDefault()}>شرایط استفاده</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); onOpen('reservation') }}>تماس با ما</a>
         </div>
       </div>
     </footer>

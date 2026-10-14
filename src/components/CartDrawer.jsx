@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { MinusIcon, PlusIcon, TrashIcon, CartIcon } from './Icons.jsx'
+import { MinusIcon, PlusIcon, CartIcon } from './Icons.jsx'
 
 export default function CartDrawer({ open, onClose, cart, onUpdateQty, onRemove }) {
   const closeRef = useRef(null)
@@ -25,11 +25,11 @@ export default function CartDrawer({ open, onClose, cart, onUpdateQty, onRemove 
         className={`drawer${open ? ' drawer--open' : ''}`}
         role="dialog"
         aria-modal="true"
-        aria-label="Your cart"
+        aria-label="سبد خرید"
       >
         <div className="drawer__header">
-          <h2 className="drawer__title">Your Order</h2>
-          <button ref={closeRef} className="modal__close" onClick={onClose} aria-label="Close cart">
+          <h2 className="drawer__title">سبد خرید</h2>
+          <button ref={closeRef} className="modal__close" onClick={onClose} aria-label="بستن سبد خرید">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
           </button>
         </div>
@@ -38,7 +38,7 @@ export default function CartDrawer({ open, onClose, cart, onUpdateQty, onRemove 
           {cart.length === 0 ? (
             <div className="cart-empty">
               <CartIcon />
-              <p>Your cart is empty</p>
+              <p>سبد خرید شما خالی است</p>
             </div>
           ) : (
             cart.map((item) => (
@@ -47,17 +47,17 @@ export default function CartDrawer({ open, onClose, cart, onUpdateQty, onRemove 
                 <div className="cart-item__info">
                   <div className="cart-item__name">{item.name}</div>
                   <div className="cart-item__price">${item.price.toFixed(2)}</div>
-                  <div className="cart-item__qty">
-                    <button className="qty-btn" onClick={() => onUpdateQty(item.id, item.quantity - 1)} aria-label={`Decrease ${item.name} quantity`}>
+                  <div className="cart-item__qty" role="group" aria-label="تعداد">
+                    <button className="qty-btn" onClick={() => onUpdateQty(item.id, item.quantity - 1)} aria-label={`کاهش تعداد ${item.name}`}>
                       <MinusIcon width="14" height="14" />
                     </button>
                     <span className="qty-val">{item.quantity}</span>
-                    <button className="qty-btn" onClick={() => onUpdateQty(item.id, item.quantity + 1)} aria-label={`Increase ${item.name} quantity`}>
+                    <button className="qty-btn" onClick={() => onUpdateQty(item.id, item.quantity + 1)} aria-label={`افزایش تعداد ${item.name}`}>
                       <PlusIcon width="14" height="14" />
                     </button>
                   </div>
                   <button className="cart-item__remove" onClick={() => onRemove(item.id)}>
-                    Remove
+                    حذف
                   </button>
                 </div>
               </div>
@@ -68,14 +68,21 @@ export default function CartDrawer({ open, onClose, cart, onUpdateQty, onRemove 
         {cart.length > 0 && (
           <div className="drawer__footer">
             <div className="cart-subtotal">
-              <span className="cart-subtotal__label">Subtotal</span>
+              <span className="cart-subtotal__label">جمع جزء</span>
               <span className="cart-subtotal__amount">${subtotal.toFixed(2)}</span>
             </div>
+            <div className="cart-total">
+              <span className="cart-total__label">مجموع کل</span>
+              <span className="cart-total__amount">${subtotal.toFixed(2)}</span>
+            </div>
             <button className="btn btn--dark" style={{ width: '100%', justifyContent: 'center' }}>
-              Checkout
+              ادامه فرایند خرید
+            </button>
+            <button className="cart-continue" onClick={onClose}>
+              ادامه خرید
             </button>
             <p className="cart-note">
-              Frontend ordering demonstration. No payment is processed and no order is sent to the kitchen.
+              این یک نمونهٔ نمایشی سفارش است؛ هیچ پرداختی انجام نمی‌شود و سفارشی به آشپزخانه ارسال نمی‌گردد.
             </p>
           </div>
         )}

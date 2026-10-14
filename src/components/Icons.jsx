@@ -7,8 +7,12 @@ const I = (props) => (
 export const SearchIcon = (p) => <I {...p}><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" /></I>
 export const CartIcon = (p) => <I {...p}><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 01-8 0" /></I>
 export const MenuIcon = (p) => <I {...p}><path d="M3 12h18M3 6h18M3 18h18" /></I>
+// ArrowRight / ArrowUpRight are kept for any LTR-facing use
 export const ArrowRight = (p) => <I {...p}><path d="M5 12h14M13 6l6 6-6 6" /></I>
 export const ArrowUpRight = (p) => <I {...p}><path d="M7 17L17 7M7 7h10v10" /></I>
+// RTL-facing directional arrows (forward = left in a right-to-left layout)
+export const ArrowLeft = (p) => <I {...p}><path d="M19 12H5M11 6l-6 6 6 6" /></I>
+export const ArrowUpLeft = (p) => <I {...p}><path d="M17 17L7 7M17 7H7v10" /></I>
 export const PlusIcon = (p) => <I {...p}><path d="M12 5v14M5 12h14" /></I>
 export const PlayIcon = (p) => <I {...p}><circle cx="12" cy="12" r="10" /><path d="M10 8l6 4-6 4V8z" /></I>
 export const LeafIcon = (p) => <I {...p}><path d="M11 20A7 7 0 019.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.78 10-10 10z" /><path d="M2 21c0-3 1.85-5.36 5.5-6" /></I>

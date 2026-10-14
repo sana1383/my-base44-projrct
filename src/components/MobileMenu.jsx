@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react'
-import { ArrowUpRight } from './Icons.jsx'
+import { ArrowUpLeft } from './Icons.jsx'
 
 const links = [
-  { label: 'Home', target: 'hero' },
-  { label: 'Menu', target: 'menu' },
-  { label: 'Our Story', target: 'story' },
-  { label: 'Locations', target: 'locations' },
-  { label: 'Shop', target: 'shop' },
+  { label: 'خانه', target: 'hero' },
+  { label: 'منو', target: 'menu' },
+  { label: 'داستان ما', target: 'story' },
+  { label: 'شعب ما', target: 'locations' },
+  { label: 'فروشگاه', target: 'shop' },
 ]
 
 export default function MobileMenu({ open, onClose, onNavigate, onOpen }) {
@@ -36,7 +36,7 @@ export default function MobileMenu({ open, onClose, onNavigate, onOpen }) {
         className={`mobile-menu${open ? ' mobile-menu--open' : ''}`}
         role="dialog"
         aria-modal="true"
-        aria-label="Mobile navigation"
+        aria-label="منوی موبایل"
       >
         <nav className="mobile-menu__nav">
           {links.map((link) => (
@@ -46,7 +46,7 @@ export default function MobileMenu({ open, onClose, onNavigate, onOpen }) {
               onClick={() => handleNav(link.target)}
             >
               {link.label}
-              <ArrowUpRight className="arrow" width="20" height="20" />
+              <ArrowUpLeft className="arrow" width="20" height="20" />
             </button>
           ))}
         </nav>
@@ -55,7 +55,7 @@ export default function MobileMenu({ open, onClose, onNavigate, onOpen }) {
           className="btn btn--dark mobile-menu__cta"
           onClick={() => { onClose(); onOpen('reservation') }}
         >
-          Reserve a Table
+          رزرو میز
         </button>
       </div>
     </>

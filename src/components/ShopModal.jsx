@@ -1,24 +1,24 @@
 import Modal from './Modal.jsx'
 
-const categories = ['Coffee Beans', 'Brewing Equipment', 'Merchandise', 'Gift Cards']
+const categories = ['دانه قهوه', 'ابزار دم‌آوری', 'محصولات هارث', 'کارت هدیه']
 
 export default function ShopModal({ open, onClose }) {
   return (
-    <Modal open={open} onClose={onClose} title="Shop">
+    <Modal open={open} onClose={onClose} title="فروشگاه">
       <div className="shop-coming">
-        <h3>Coming Soon</h3>
+        <h3>به‌زودی</h3>
         <p>
-          We're carefully curating a collection of single-origin beans, brewing tools,
-          and Harth Coffee merchandise. Sign up for our newsletter below to be the first
-          to know when our shop opens.
+          در حال آماده‌سازی مجموعه‌ای از دانه‌های قهوه تک‌خاستگاه، ابزارهای دم‌آوری و
+          محصولات HARTH COFFEE هستیم. برای اطلاع از زمان افتتاح فروشگاه، در خبرنامه
+          ما عضو شوید.
         </p>
         <div className="shop-categories">
           {categories.map((c) => (
             <span className="shop-cat" key={c}>{c}</span>
           ))}
         </div>
-        <p style={{ fontSize: '0.78rem', opacity: 0.5, fontStyle: 'italic' }}>
-          No checkout or payment processing is available yet.
+        <p style={{ fontSize: '0.78rem', opacity: 0.55 }}>
+          هنوز امکان پرداخت و تکمیل خرید فراهم نیست.
         </p>
       </div>
     </Modal>

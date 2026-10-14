@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
-import { SearchIcon, CartIcon, MenuIcon } from './Icons.jsx'
+import { SearchIcon, CartIcon } from './Icons.jsx'
 
 const navLinks = [
-  { label: 'Home', target: 'hero' },
-  { label: 'Menu', target: 'menu' },
-  { label: 'Our Story', target: 'story' },
-  { label: 'Locations', target: 'locations' },
-  { label: 'Shop', target: 'shop' },
+  { label: 'خانه', target: 'hero' },
+  { label: 'منو', target: 'menu' },
+  { label: 'داستان ما', target: 'story' },
+  { label: 'شعب ما', target: 'locations' },
+  { label: 'فروشگاه', target: 'shop' },
 ]
 
 export default function Header({ cartCount, onOpen, onNavigate, activeSection, mobileOpen }) {
@@ -39,12 +39,12 @@ export default function Header({ cartCount, onOpen, onNavigate, activeSection, m
   return (
     <header className={cls}>
       <div className="header__inner">
-        <button className="logo" onClick={(e) => handleNav(e, 'hero')} aria-label="Harth Coffee home">
+        <button className="logo" onClick={(e) => handleNav(e, 'hero')} aria-label="HARTH COFFEE — صفحه اصلی">
           <span className="logo__main">HARTH</span>
           <span className="logo__sub">COFFEE</span>
         </button>
 
-        <nav className="nav" aria-label="Primary">
+        <nav className="nav" aria-label="فهرست اصلی">
           {navLinks.map((link) => (
             <a
               key={link.target}
@@ -58,17 +58,17 @@ export default function Header({ cartCount, onOpen, onNavigate, activeSection, m
         </nav>
 
         <div className="header__right">
-          <button className="icon-btn" onClick={() => onOpen('search')} aria-label="Search menu items">
+          <button className="icon-btn" onClick={() => onOpen('search')} aria-label="جست‌وجو در منو">
             <SearchIcon width="20" height="20" />
           </button>
-          <button className="icon-btn" onClick={() => onOpen('cart')} aria-label={`Cart with ${cartCount} items`} style={{ position: 'relative' }}>
+          <button className="icon-btn" onClick={() => onOpen('cart')} aria-label={`سبد خرید با ${cartCount} کالا`} style={{ position: 'relative' }}>
             <CartIcon width="20" height="20" />
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </button>
           <button className="btn btn--outline" onClick={() => onOpen('reservation')} style={dark && scrolled ? { borderColor: 'rgba(255,253,248,0.35)', color: 'var(--warm-white)' } : {}}>
-            Reserve a Table
+            رزرو میز
           </button>
-          <button className="menu-toggle" aria-label="Open menu" aria-expanded={mobileOpen ? 'true' : 'false'} onClick={() => onOpen('mobile')}>
+          <button className="menu-toggle" aria-label="باز کردن منو" aria-expanded={mobileOpen ? 'true' : 'false'} onClick={() => onOpen('mobile')}>
             <span /><span /><span />
           </button>
         </div>
