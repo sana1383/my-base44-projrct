@@ -32,6 +32,7 @@ Defined in `:root` in `src/index.css`:
 - Dark charcoal `#1B1916` (story panel), Espresso `#241914` (footer), Soft border `#D8CBBE`
 - Header is a 3-column grid (`1fr auto 1fr`) so the nav sits optically centered on desktop
 - Menu header is a 2-column grid: title left, supporting copy + "View Full Menu" right (stacks under 860px)
+- Hero photo (`.hero__img`) is absolutely positioned to fill `.hero__right`. Under 860px the wrapper is a fixed 62svh band, so the photo never leaves an empty gap under itself (a plain `height: 100%` image resolves to its natural ratio there)
 
 ## Features
 - Smooth-scroll navigation with active section tracking
