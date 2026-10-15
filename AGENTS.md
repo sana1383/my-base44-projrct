@@ -28,16 +28,29 @@ Vite dev server binds 0.0.0.0 with live reload.
 - `src/data/locations.js` — sample location data
 - `src/hooks/useScrollReveal.js` — Intersection Observer scroll animation hook
 - `src/hooks/useHeroParallax.js` — hero background-video parallax + `usePrefersReducedMotion`
+- `src/hooks/useParallaxScroll.js` — single-element scroll parallax (story photograph)
+- `src/hooks/useTilt.js` — pointer tilt for product cards (mouse only)
 - `public/media/harth-hero.mp4` — hero background video (see below)
 - `src/index.css` — complete design system (colors, typography, layout, responsive)
 
 ## Design Tokens
 Defined in `:root` in `src/index.css`:
 - Warm ivory `#F5EFE5`, Cream `#EFE5D8`, Coffee brown `#79513A`, Espresso `#241914`
-- Dark charcoal `#1B1916` (story panel), Espresso `#241914` (footer), Soft border `#D8CBBE`
+- Espresso deep `#1A1310`, charcoal `#14120F`, warm white `#FFFDF8`, border `#DDD1C4`
+- **Muted copper `#A96A3E` is the only accent** (`--copper` / `--copper-light` `#D8A87E` for
+  dark photography). It marks eyebrows, card labels, active nav underline, dividers, focus rings
+  and hover states — never body copy, and never more than one accent per view.
+- Ink over photography: `--on-media` / `--on-media-muted`. Anything sitting on the hero video uses
+  these, not the espresso ink.
+- Spacing is one scale (`--space-1` … `--space-6`), shadows are espresso-tinted
+  (`--shadow-soft/card/lift`), and dark panels use the gradients `--grad-espresso` / `--grad-media`.
 - Header is a 3-column grid (`1fr auto 1fr`) so the nav sits optically centered on desktop
 - Menu header is a 2-column grid: title left, supporting copy + "View Full Menu" right (stacks under 860px)
-- Hero photo (`.hero__img`) is absolutely positioned to fill `.hero__right`. Under 860px the wrapper is a fixed 62svh band, so the photo never leaves an empty gap under itself (a plain `height: 100%` image resolves to its natural ratio there)
+- **Hero is a full-bleed cinematic composition**: `.hero__media` covers the whole section and
+  `.hero__inner` lays the copy over it, anchored to the bottom-start corner (bottom-right in RTL) with
+  the editorial line in the end corner. There is no split column any more — the old `.hero__left` /
+  `.hero__right` rules are gone; keep new hero layers inside `.hero__inner` or absolutely positioned
+  over `.hero__media`, and mind the fixed header (top padding is `calc(76px + var(--space-5))`).
 
 ## Hero background video
 - The asset is `public/media/harth-hero.mp4`, served straight from `public/` (no import, no build step).
@@ -51,20 +64,34 @@ Defined in `:root` in `src/index.css`:
   layer that stays underneath it. The `<img>` and `<video>` occupy the same absolute box with the same
   `object-fit`, so the video fades in over the still with no layout shift, and a browser that cannot
   decode the file still shows a proper photo.
-- Crop: the 16:9 source is cropped hard by the tall desktop column, so `object-position: 42% center`
-  keeps the cup and the café interior in frame. Re-check the crop at the *start and end* of the clip
-  (the camera slowly pushes in), not just one frame.
-- Depth: `useHeroParallax` writes `--par-x` / `--par-y` / `--par-scroll` on `.hero__right`; CSS reads
-  them with a different factor per layer (media 1×, center caption 0.45×, corner caption 0.3×) — that
-  difference is the parallax effect. The variables must stay on that wrapper, since `.hero__media` and
-  the captions are siblings and custom properties only inherit downwards. Any new moving layer should
-  read the same variables rather than adding its own listener.
+- Crop: `object-position: 42% center` keeps the cup and the café interior in frame at every
+  breakpoint (phones crop the 16:9 source far harder than the full-bleed desktop frame). Re-check the
+  crop at the *start and end* of the clip — the camera slowly pushes in — not just one frame.
+- Depth: `useHeroParallax` writes `--par-x` / `--par-y` / `--par-scroll` on `.hero` (the section
+  carries the ref, so every layer inherits them); CSS reads them with a different factor per layer —
+  media 1×, copy 0.3×, corner line 0.15× — and that difference *is* the parallax effect. Keep new
+  moving layers on those same variables instead of adding another listener.
 - Motion gates: only `pointerType === 'mouse'` moves the hero, only at `min-width: 861px`, and never
   under `prefers-reduced-motion` (where the video is also paused, hidden, and the still photo is used).
   Phones, tablets and touch-laptop touchscreens stay completely still.
 - Verifying playback: `videoWidth` stays `0` and `requestVideoFrameCallback` never fires when the
   browser cannot decode the codec, even though `readyState` is 4 and `currentTime` advances. Check
   both, plus `video.canPlayType('video/mp4; codecs="avc1.42E01E"')`, before believing the video plays.
+
+## Motion & interaction gates
+Every moving piece is opt-in on the visitor's side — check these before adding movement:
+- `useHeroParallax` (hero video + copy) — pointer and scroll, desktop only, mouse pointers only, off under reduced-motion.
+- `useParallaxScroll` (story photograph, `--p-y`) — desktop only, off under reduced-motion; the image is overscaled 1.12 in CSS so the drift never exposes an edge.
+- `useTilt` (product cards, `--tilt-x` / `--tilt-y` + `is-tilting`) — mouse pointers only; touch and pen are ignored, and the class is what carries `will-change`, so idle cards never hold a composited layer.
+- `.reveal` scroll reveals are shortened (0.75s, 22px) and staggered by `data-delay`; `useScrollReveal` already forces them visible under reduced-motion.
+- The global reduced-motion block is the safety net: it also parks the hero/copy/story transforms and removes the card lift.
+
+## Header states
+`.header` has three looks and JS toggles exactly one of the first two:
+`header--on-media` (top of page, transparent, light ink over the hero video, with a soft top shade so
+the wordmark never sinks into a bright frame) → `header--scrolled` (solid ivory bar, espresso ink),
+plus `header--dark` when the story/footer panels are under it. The reservation pill takes its ink from
+those classes — do not reintroduce the inline style that used to patch it per section.
 
 ## Features
 - Smooth-scroll navigation with active section tracking

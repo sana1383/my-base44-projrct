@@ -29,7 +29,13 @@ export default function Header({ cartCount, onOpen, onNavigate, activeSection, m
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const cls = `header${scrolled ? ' header--scrolled' : ''}${dark && scrolled ? ' header--dark' : ''}`
+  // At the top the bar floats transparently over the hero video with light ink;
+  // once the page moves it becomes the solid bar, dark over the story & footer.
+  const cls = [
+    'header',
+    scrolled ? 'header--scrolled' : 'header--on-media',
+    dark && scrolled ? 'header--dark' : '',
+  ].filter(Boolean).join(' ')
 
   const handleNav = (e, target) => {
     e.preventDefault()
@@ -65,7 +71,7 @@ export default function Header({ cartCount, onOpen, onNavigate, activeSection, m
             <CartIcon width="20" height="20" />
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </button>
-          <button className="btn btn--outline" onClick={() => onOpen('reservation')} style={dark && scrolled ? { borderColor: 'rgba(255,253,248,0.35)', color: 'var(--warm-white)' } : {}}>
+          <button className="btn btn--outline" onClick={() => onOpen('reservation')}>
             رزرو میز
           </button>
           <button className="menu-toggle" aria-label="باز کردن منو" aria-expanded={mobileOpen ? 'true' : 'false'} onClick={() => onOpen('mobile')}>

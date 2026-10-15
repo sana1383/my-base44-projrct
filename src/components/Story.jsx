@@ -1,9 +1,12 @@
 import { storyImage } from '../data/menuItems.js'
 import { ArrowUpLeft } from './Icons.jsx'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
+import useParallaxScroll from '../hooks/useParallaxScroll.js'
 
 export default function Story({ onOpen }) {
   const { ref, visible } = useScrollReveal()
+  // the photograph drifts a little slower than the panels beside it
+  const parallaxRef = useParallaxScroll()
 
   return (
     <section className="story" id="story" ref={ref}>
@@ -22,11 +25,12 @@ export default function Story({ onOpen }) {
         </button>
       </div>
 
-      <div className={`story__center reveal${visible ? ' is-visible' : ''}`} data-delay="1">
+      <div className={`story__center reveal${visible ? ' is-visible' : ''}`} data-delay="1" ref={parallaxRef}>
         <img
           src={storyImage}
           alt="یک لاته خوش‌عکس در کنار دفتری روی میز چوبی"
           loading="lazy"
+          decoding="async"
         />
       </div>
 

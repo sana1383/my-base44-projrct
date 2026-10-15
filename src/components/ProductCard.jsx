@@ -1,14 +1,18 @@
 import { PlusIcon } from './Icons.jsx'
+import useTilt from '../hooks/useTilt.js'
 
 export default function ProductCard({ item, onAdd }) {
+  const tiltRef = useTilt()
+
   return (
-    <article className="product-card">
+    <article className="product-card" ref={tiltRef}>
       <div className="product-card__img-wrap">
         <img
           className="product-card__img"
           src={item.image}
           alt={`${item.name} — ${item.description}`}
           loading="lazy"
+          decoding="async"
         />
       </div>
       <div className="product-card__body">

@@ -10,7 +10,7 @@ export default function LocationsModal({ open, onClose }) {
       </p>
       {locations.map((loc) => (
         <div className="loc-card" key={loc.id}>
-          <img className="loc-card__img" src={loc.image} alt={loc.name} />
+          <img className="loc-card__img" src={loc.image} alt={loc.name} loading="lazy" decoding="async" />
           <div style={{ flex: 1 }}>
             <h3 className="loc-card__name">{loc.name}</h3>
             <div className="loc-card__row">

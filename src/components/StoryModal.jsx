@@ -4,7 +4,7 @@ import { storyImage } from '../data/menuItems.js'
 export default function StoryModal({ open, onClose }) {
   return (
     <Modal open={open} onClose={onClose} title="داستان ما" wide>
-      <img className="story-modal__img" src={storyImage} alt="لاته روی میز چوبی در کنار یک دفتر" />
+      <img className="story-modal__img" src={storyImage} alt="لاته روی میز چوبی در کنار یک دفتر" loading="lazy" decoding="async" />
       <p className="story-modal__text">
         هارت کافی با یک ایده ساده آغاز شد: قهوه خوب، آدم‌ها را به هم نزدیک می‌کند.
         آنچه با یک کافه کوچک در گوشه‌ای شروع شد، امروز به جمعی از عاشقان قهوه،
