@@ -27,6 +27,8 @@ Vite dev server binds 0.0.0.0 with live reload.
 - `src/data/menuItems.js` — product catalog, image URLs, filter definitions
 - `src/data/locations.js` — sample location data
 - `src/hooks/useScrollReveal.js` — Intersection Observer scroll animation hook
+- `src/hooks/useHeroParallax.js` — hero background-video parallax + `usePrefersReducedMotion`
+- `public/media/harth-hero.mp4` — hero background video (see below)
 - `src/index.css` — complete design system (colors, typography, layout, responsive)
 
 ## Design Tokens
@@ -36,6 +38,33 @@ Defined in `:root` in `src/index.css`:
 - Header is a 3-column grid (`1fr auto 1fr`) so the nav sits optically centered on desktop
 - Menu header is a 2-column grid: title left, supporting copy + "View Full Menu" right (stacks under 860px)
 - Hero photo (`.hero__img`) is absolutely positioned to fill `.hero__right`. Under 860px the wrapper is a fixed 62svh band, so the photo never leaves an empty gap under itself (a plain `height: 100%` image resolves to its natural ratio there)
+
+## Hero background video
+- The asset is `public/media/harth-hero.mp4`, served straight from `public/` (no import, no build step).
+- **It is a re-encode, on purpose.** The video the user uploaded was HEVC/H.265 (`hvc1`), which only
+  Safari decodes among mainstream browsers — Chrome reported `readyState 4` while never presenting a
+  single frame, so the hero silently showed the poster photo forever. The file in the repo is the same
+  footage re-encoded to H.264 (`libx264`, yuv420p, 1280x720, 10s, audio stripped, `+faststart` so the
+  moov atom streams first). If the video is ever replaced, **confirm the new file is H.264**; a "plays
+  fine for me in Safari" test is not enough.
+- Poster + fallback: the Pexels still (`heroImage`) is both `poster=` on the `<video>` and the `<img>`
+  layer that stays underneath it. The `<img>` and `<video>` occupy the same absolute box with the same
+  `object-fit`, so the video fades in over the still with no layout shift, and a browser that cannot
+  decode the file still shows a proper photo.
+- Crop: the 16:9 source is cropped hard by the tall desktop column, so `object-position: 42% center`
+  keeps the cup and the café interior in frame. Re-check the crop at the *start and end* of the clip
+  (the camera slowly pushes in), not just one frame.
+- Depth: `useHeroParallax` writes `--par-x` / `--par-y` / `--par-scroll` on `.hero__right`; CSS reads
+  them with a different factor per layer (media 1×, center caption 0.45×, corner caption 0.3×) — that
+  difference is the parallax effect. The variables must stay on that wrapper, since `.hero__media` and
+  the captions are siblings and custom properties only inherit downwards. Any new moving layer should
+  read the same variables rather than adding its own listener.
+- Motion gates: only `pointerType === 'mouse'` moves the hero, only at `min-width: 861px`, and never
+  under `prefers-reduced-motion` (where the video is also paused, hidden, and the still photo is used).
+  Phones, tablets and touch-laptop touchscreens stay completely still.
+- Verifying playback: `videoWidth` stays `0` and `requestVideoFrameCallback` never fires when the
+  browser cannot decode the codec, even though `readyState` is 4 and `currentTime` advances. Check
+  both, plus `video.canPlayType('video/mp4; codecs="avc1.42E01E"')`, before believing the video plays.
 
 ## Features
 - Smooth-scroll navigation with active section tracking
