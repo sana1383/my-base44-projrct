@@ -23,6 +23,12 @@ export default function App() {
   const toastTimer = useRef(null)
 
   // ---- Cart ----
+  const showToast = useCallback((text) => {
+    setToast(text)
+    clearTimeout(toastTimer.current)
+    toastTimer.current = setTimeout(() => setToast(null), 2500)
+  }, [])
+
   const addToCart = useCallback((item) => {
     setCart((prev) => {
       const existing = prev.find((i) => i.id === item.id)
@@ -31,10 +37,14 @@ export default function App() {
       }
       return [...prev, { ...item, quantity: 1 }]
     })
-    setToast(`${item.name} به سبد خرید اضافه شد.`)
-    clearTimeout(toastTimer.current)
-    toastTimer.current = setTimeout(() => setToast(null), 2500)
-  }, [])
+    showToast(`${item.name} به سبد خرید اضافه شد.`)
+  }, [showToast])
+
+  // Checkout is a frontend demonstration — tell the visitor instead of doing nothing
+  const checkout = useCallback(() => {
+    setActive(null)
+    showToast('این یک نمونهٔ نمایشی است؛ پرداختی انجام نمی‌شود.')
+  }, [showToast])
 
   const updateQty = useCallback((id, qty) => {
     if (qty <= 0) {
@@ -119,7 +129,7 @@ export default function App() {
 
       {/* ---- Drawers & Modals ---- */}
       <MobileMenu open={active === 'mobile'} onClose={closeModal} onNavigate={navigate} onOpen={openModal} />
-      <CartDrawer open={active === 'cart'} onClose={closeModal} cart={cart} onUpdateQty={updateQty} onRemove={removeFromCart} />
+      <CartDrawer open={active === 'cart'} onClose={closeModal} cart={cart} onUpdateQty={updateQty} onRemove={removeFromCart} onCheckout={checkout} />
       <SearchModal open={active === 'search'} onClose={closeModal} onAdd={addToCart} />
       <ReservationModal open={active === 'reservation'} onClose={closeModal} />
       <StoryModal open={active === 'story'} onClose={closeModal} />

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { MinusIcon, PlusIcon, CartIcon } from './Icons.jsx'
 
-export default function CartDrawer({ open, onClose, cart, onUpdateQty, onRemove }) {
+export default function CartDrawer({ open, onClose, cart, onUpdateQty, onRemove, onCheckout }) {
   const closeRef = useRef(null)
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export default function CartDrawer({ open, onClose, cart, onUpdateQty, onRemove 
               <span className="cart-total__label">مجموع کل</span>
               <span className="cart-total__amount">${subtotal.toFixed(2)}</span>
             </div>
-            <button className="btn btn--dark" style={{ width: '100%', justifyContent: 'center' }}>
+            <button className="btn btn--dark" style={{ width: '100%', justifyContent: 'center' }} onClick={onCheckout}>
               ادامه فرایند خرید
             </button>
             <button className="cart-continue" onClick={onClose}>

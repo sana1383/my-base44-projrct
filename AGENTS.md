@@ -62,7 +62,8 @@ Defined in `:root` in `src/index.css`:
   fine for me in Safari" test is not enough.
 - Poster + fallback: the Pexels still (`heroImage`) is both `poster=` on the `<video>` and the `<img>`
   layer that stays underneath it. The `<img>` and `<video>` occupy the same absolute box with the same
-  `object-fit`, so the video fades in over the still with no layout shift, and a browser that cannot
+  `object-fit` and the same `object-position` (`42% center` — keep the two in sync, or the still visibly
+  jumps sideways the moment the video fades in over it), and a browser that cannot
   decode the file still shows a proper photo.
 - Crop: `object-position: 42% center` keeps the cup and the café interior in frame at every
   breakpoint (phones crop the 16:9 source far harder than the full-bleed desktop frame). Re-check the
@@ -96,7 +97,8 @@ those classes — do not reintroduce the inline style that used to patch it per 
 ## Features
 - Smooth-scroll navigation with active section tracking
 - Sticky header that transitions to dark over story/footer sections
-- Functional cart drawer (add, quantity, remove, subtotal)
+- Functional cart drawer (add, quantity, remove, subtotal); the checkout button is a demo action — it closes
+  the drawer and says so through the toast, instead of doing nothing
 - Search modal filtering menu items by name/category
 - Reservation form with validation (frontend demonstration)
 - Full menu modal with category filters
