@@ -24,6 +24,8 @@ Vite dev server binds 0.0.0.0 with live reload.
 ## Key Files
 - `src/App.jsx` — root component, state management for cart & modals
 - `src/components/` — all UI components (Header, Hero, Menu, Story, Values, Footer, modals)
+- `src/components/Signature.jsx` — the dark band that stages the 3D bean between the values strip and the footer
+- `src/components/CoffeeBean3D.jsx` — the 3D coffee bean itself (three.js, imported lazily)
 - `src/data/menuItems.js` — product catalog, image URLs, filter definitions
 - `src/data/locations.js` — sample location data
 - `src/hooks/useScrollReveal.js` — Intersection Observer scroll animation hook
@@ -85,7 +87,30 @@ Every moving piece is opt-in on the visitor's side — check these before adding
 - `useParallaxScroll` (story photograph, `--p-y`) — desktop only, off under reduced-motion; the image is overscaled 1.12 in CSS so the drift never exposes an edge.
 - `useTilt` (product cards, `--tilt-x` / `--tilt-y` + `is-tilting`) — mouse pointers only; touch and pen are ignored, and the class is what carries `will-change`, so idle cards never hold a composited layer.
 - `.reveal` scroll reveals are shortened (0.75s, 22px) and staggered by `data-delay`; `useScrollReveal` already forces them visible under reduced-motion.
+- `CoffeeBean3D` (signature band) — parked when off-screen, mouse-only lean, one still frame under
+  reduced-motion (see the 3D section below).
 - The global reduced-motion block is the safety net: it also parks the hero/copy/story transforms and removes the card lift.
+
+## 3D coffee bean (signature band)
+- The project's only 3D: `src/components/CoffeeBean3D.jsx`, staged by `src/components/Signature.jsx` in its own
+  dark band. `three` is a real dependency in `package.json` (the compose `npm install` picks it up).
+- **three.js is kept out of the way twice**: it is never in the main bundle (dynamic `import('three')` → its
+  own chunk) and never fetched before the visitor scrolls near the band (an IntersectionObserver gate).
+  Keep it that way — a static import puts it in the first paint and competes with the hero video.
+- The mesh is generated, not downloaded: one `SphereGeometry` reshaped in `beanGeometry()` — stretched along
+  its long axis, then dented by a longitudinal furrow that fades out at both ends. That dent *is* the crease
+  a bean is recognised by, so there is no model file to fetch. Re-tuning those constants changes the
+  silhouette; nothing is faked with a CSS shape or an image.
+- `data-state` on `.bean3d` reports the fallback ladder: `idle` (band still far away) → `loading` →
+  `live` | `static` | `fallback`. `fallback` (no WebGL, or the module failed) hides the stage, so the band
+  renders as copy alone instead of a broken box.
+- The loop is parked by an IntersectionObserver whenever the band leaves the viewport, spins only while
+  `prefers-reduced-motion` is off (there it draws a single still frame — `static`), leans toward the pointer
+  on mouse + desktop only (the same gate as the rest of the site), and caps devicePixelRatio at 2.
+- Verifying it actually turns: `canvas.toDataURL()` is useless here (no `preserveDrawingBuffer`). Read the
+  WebGL pixels **inside a nested `requestAnimationFrame` callback** — that runs after three's draw in the
+  same batch, while the buffer is still valid — and compare a brightness signature ~1.5s apart; an equal
+  sum means a frozen scene.
 
 ## Header states
 `.header` has three looks and JS toggles exactly one of the first two:
@@ -108,6 +133,7 @@ those classes — do not reintroduce the inline style that used to patch it per 
 - Mobile full-screen navigation panel
 - Scroll-reveal animations (respects prefers-reduced-motion)
 - Accessible modals (Escape to close, focus management, ARIA labels)
+- One real 3D element: a slowly turning coffee bean in its own signature band (three.js, lazily loaded)
 
 ## Localization (Persian / RTL)
 The site is fully Persian and right-to-left. Things that are easy to break when editing:

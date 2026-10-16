@@ -5,6 +5,7 @@ import Stats from './components/Stats.jsx'
 import Menu from './components/Menu.jsx'
 import Story from './components/Story.jsx'
 import Values from './components/Values.jsx'
+import Signature from './components/Signature.jsx'
 import Footer from './components/Footer.jsx'
 import MobileMenu from './components/MobileMenu.jsx'
 import CartDrawer from './components/CartDrawer.jsx'
@@ -110,6 +111,7 @@ export default function App() {
         <Menu onAdd={addToCart} onOpen={openModal} />
         <Story onOpen={openModal} />
         <Values />
+        <Signature />
       </main>
 
       <Footer onOpen={openModal} />
