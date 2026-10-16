@@ -244,6 +244,10 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.3; 
   border-bottom-color: var(--soft-border);
 }
 .header--dark {
+  /* Dark panels (story, signature band, footer) scroll under the bar: the ink has to
+     flip to the light-on-media set, or espresso links land on near-black (≈1.1:1).
+     The reservation pill and icon hover already assume light ink — this is that half. */
+  color: var(--on-media);
   background: rgba(20, 12, 8, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -327,7 +331,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.3; 
 .nav__link:hover::after { transform: scaleX(1); }
 .nav__link--active { opacity: 1; }
 .nav__link--active::after { background: var(--copper); transform: scaleX(1); }
-.header--on-media .nav__link--active::after { background: var(--copper-light); }
+.header--on-media .nav__link--active::after,
+.header--dark .nav__link--active::after { background: var(--copper-light); }
 
 .header__right {
   display: flex;

@@ -10,6 +10,11 @@ docker compose -f docker-compose.base44.yml up -d --build
 ```
 The app runs on host port 3000 (mapped to container port 5173).
 Vite dev server binds 0.0.0.0 with live reload.
+The container launches Vite directly (`node node_modules/vite/bin/vite.js`, after `npm install
+--no-audit --no-fund`) rather than through `npm run dev`: the npm wrapper writes an
+`npm error … signal SIGTERM` trace plus audit notices to the logs on every stop/boot, which reads
+like an application failure. The healthcheck's `start_period` is 120s because a cold `node_modules`
+volume needs a full install (three.js included) before the dev server can answer.
 
 ## Architecture
 - **Framework:** Vite 5 + React 18 (JSX, no TypeScript)
@@ -116,8 +121,12 @@ Every moving piece is opt-in on the visitor's side — check these before adding
 `.header` has three looks and JS toggles exactly one of the first two:
 `header--on-media` (top of page, transparent, light ink over the hero video, with a soft top shade so
 the wordmark never sinks into a bright frame) → `header--scrolled` (solid ivory bar, espresso ink),
-plus `header--dark` when the story/footer panels are under it. The reservation pill takes its ink from
+plus `header--dark` when the story/signature/footer panels are under it. The reservation pill takes its ink from
 those classes — do not reintroduce the inline style that used to patch it per section.
+`header--dark` carries the light ink (`color: var(--on-media)`) as well as the dark bar — it is the
+dark-surface half of the pair, not just a background. Drop that colour and the espresso nav links
+land on the near-black bar at ≈1.1:1 (effectively invisible); the active underline goes
+`--copper-light` there for the same reason.
 
 ## Features
 - Smooth-scroll navigation with active section tracking

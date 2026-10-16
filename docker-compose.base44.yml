@@ -11,14 +11,19 @@ services:
       - BASE44_PREVIEW_MODE=${BASE44_PREVIEW_MODE:-0}
       - BASE44_SANDBOX_HOST_DOMAIN=${BASE44_SANDBOX_HOST_DOMAIN:-}
       - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS=${BASE44_SANDBOX_HOST_DOMAIN:-}
-    command: ["sh", "-ec", "npm install && exec npm run dev"]
+    # Vite is launched directly instead of through `npm run dev`: the npm wrapper prints an
+    # `npm error ... signal SIGTERM` trace every time the container is stopped (and audit/funding
+    # notices on every boot), which reads like an app failure in the logs. Direct launch = quiet stop.
+    command: ["sh", "-ec", "npm install --no-audit --no-fund && exec node node_modules/vite/bin/vite.js --host 0.0.0.0 --port 5173"]
     restart: on-failure
     healthcheck:
       test: ["CMD-SHELL", "node -e \"fetch('http://localhost:5173/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
       interval: 15s
       timeout: 5s
       retries: 5
-      start_period: 30s
+      # A cold node_modules volume needs a full `npm install` (three.js included) before the
+      # dev server can answer; 30s was not enough and showed as unhealthy during that window.
+      start_period: 120s
 
 volumes:
   node_modules:
