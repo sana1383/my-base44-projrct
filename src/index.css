@@ -949,7 +949,13 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.3; 
   width: 100%;
   aspect-ratio: 1 / 1;
 }
-.bean3d canvas { display: block; width: 100%; height: 100%; }
+.bean3d canvas {
+  display: block;
+  width: 100%; height: 100%;
+  /* A finger on the stage may sweep sideways to turn the bean; vertical
+     scrolling always stays with the page. */
+  touch-action: pan-y;
+}
 /* No WebGL: drop the empty stage rather than showing a broken box */
 .bean3d[data-state='fallback'] { display: none; }
 .signature__copy { max-width: 34ch; }

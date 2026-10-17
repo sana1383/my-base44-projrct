@@ -17,6 +17,7 @@ import { useEffect, useRef, useState } from 'react'
  *   live     — running, turning and answering the pointer
  *   static   — loaded but parked (prefers-reduced-motion): one still frame
  *   fallback — no WebGL, or the module failed: the band renders without it
+ * `data-drag` is added on the wrapper while a touch is turning the bean.
  */
 
 const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
@@ -32,9 +33,12 @@ function hasWebGL() {
 }
 
 /**
- * A coffee bean, built from a sphere: stretched along its long axis, then dented
- * by a longitudinal furrow that fades out towards both ends. That dent is the
- * crease a bean is recognised by, so no model file has to be downloaded.
+ * A coffee bean, built from a sphere: narrowed along its length and depth, then
+ * dented by the longitudinal crease a roasted bean is recognised by.
+ *
+ * The crease is not a straight seam — it wanders across the face as it runs from
+ * one tip to the other (`bend`), and fades out at both ends (`1 - x * x`), which
+ * is how the groove on a real bean behaves. So no model file has to be fetched.
  */
 function beanGeometry(THREE) {
   const geo = new THREE.SphereGeometry(1, 128, 96)
@@ -43,12 +47,15 @@ function beanGeometry(THREE) {
     const x = pos.getX(i)
     const y = pos.getY(i)
     const z = pos.getZ(i)
+    // the crease drifts across the face as it travels the length of the bean
+    const bend = 0.26 * Math.sin(x * Math.PI * 0.85)
     // angle around the bean's long axis (x), wrapped to 0…π from the crease side
-    let d = Math.abs(Math.atan2(z, y) - Math.PI / 2)
+    let d = Math.abs(Math.atan2(z, y) - (Math.PI / 2 + bend))
     if (d > Math.PI) d = Math.PI * 2 - d
-    const furrow = Math.exp(-(d * d) / 0.05) * (1 - x * x)
-    const pinch = 1 - 0.4 * furrow
-    pos.setXYZ(i, x, y * 0.78 * pinch, z * 0.63 * pinch)
+    const furrow = Math.exp(-(d * d) / 0.045) * (1 - x * x)
+    const pinch = 1 - 0.42 * furrow
+    // 1 : 0.72 : 0.5 — length : width : thickness, the proportions of a real bean
+    pos.setXYZ(i, x, y * 0.72 * pinch, z * 0.5 * pinch)
   }
   pos.needsUpdate = true
   geo.computeVertexNormals()
@@ -136,9 +143,33 @@ export default function CoffeeBean3D() {
             if (!frame) render() // a resize clears the buffer: keep the still frame drawn
           }
 
-          // ---- pointer: a real mouse on a desktop-sized screen, never on touch
+          // ---- pointer: a real mouse on a desktop-sized screen leans the bean,
+          //      a finger turns it (lightweight, and it eases back into the spin)
           const pointer = { x: 0, y: 0, tx: 0, ty: 0 }
+          const drag = { current: 0, target: 0, startX: 0, active: false }
+          const isTouch = (e) => e.pointerType === 'touch' || e.pointerType === 'pen'
+
+          const onPointerDown = (e) => {
+            if (!isTouch(e) || reduced.matches) return
+            drag.active = true
+            drag.startX = e.clientX
+            wrap.setAttribute('data-drag', 'active')
+          }
+
+          const endDrag = (e) => {
+            if (e && e.pointerType && !isTouch(e)) return
+            drag.active = false
+            drag.target = 0 // release: the drag eases out and the steady turn resumes
+            wrap.removeAttribute('data-drag')
+          }
+
           const onPointerMove = (e) => {
+            if (isTouch(e)) {
+              if (!drag.active) return
+              // at most about half a turn, so a long swipe never whips it around
+              drag.target = Math.max(-0.9, Math.min(0.9, (e.clientX - drag.startX) * 0.008))
+              return
+            }
             if (!desktop.matches || (e.pointerType && e.pointerType !== 'mouse')) return
             const r = wrap.getBoundingClientRect()
             if (!r.width || !r.height) return
@@ -146,8 +177,13 @@ export default function CoffeeBean3D() {
             pointer.ty = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (r.height / 2)))
           }
           const onPointerLeave = () => { pointer.tx = 0; pointer.ty = 0 }
+
+          wrap.addEventListener('pointerdown', onPointerDown)
           wrap.addEventListener('pointermove', onPointerMove, { passive: true })
           wrap.addEventListener('pointerleave', onPointerLeave)
+          // the finger can leave the stage before it lifts, so the release is global
+          window.addEventListener('pointerup', endDrag)
+          window.addEventListener('pointercancel', endDrag)
 
           // ---- the loop, parked whenever the band is off-screen or motion is unwelcome
           let spin = 0
@@ -160,8 +196,10 @@ export default function CoffeeBean3D() {
             spin += dt * 0.34
             pointer.x += (pointer.tx - pointer.x) * 0.06
             pointer.y += (pointer.ty - pointer.y) * 0.06
+            // under the finger the turn follows closely; let go and it eases home
+            drag.current += (drag.target - drag.current) * (drag.active ? 0.2 : 0.05)
             // slow turn, a whisper of wobble, and a restrained lean toward the pointer
-            bean.rotation.y = spin + pointer.x * 0.32
+            bean.rotation.y = spin + pointer.x * 0.32 + drag.current
             bean.rotation.x = -0.16 + pointer.y * -0.22
             bean.rotation.z = Math.sin(spin * 0.6) * 0.045
             render()
@@ -206,8 +244,12 @@ export default function CoffeeBean3D() {
             reduced.removeEventListener('change', syncMotion)
             io.disconnect()
             ro.disconnect()
+            wrap.removeEventListener('pointerdown', onPointerDown)
             wrap.removeEventListener('pointermove', onPointerMove)
             wrap.removeEventListener('pointerleave', onPointerLeave)
+            window.removeEventListener('pointerup', endDrag)
+            window.removeEventListener('pointercancel', endDrag)
+            wrap.removeAttribute('data-drag')
             geo.dispose()
             mat.dispose()
             renderer.dispose()

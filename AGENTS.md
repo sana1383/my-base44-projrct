@@ -92,8 +92,8 @@ Every moving piece is opt-in on the visitor's side — check these before adding
 - `useParallaxScroll` (story photograph, `--p-y`) — desktop only, off under reduced-motion; the image is overscaled 1.12 in CSS so the drift never exposes an edge.
 - `useTilt` (product cards, `--tilt-x` / `--tilt-y` + `is-tilting`) — mouse pointers only; touch and pen are ignored, and the class is what carries `will-change`, so idle cards never hold a composited layer.
 - `.reveal` scroll reveals are shortened (0.75s, 22px) and staggered by `data-delay`; `useScrollReveal` already forces them visible under reduced-motion.
-- `CoffeeBean3D` (signature band) — parked when off-screen, mouse-only lean, one still frame under
-  reduced-motion (see the 3D section below).
+- `CoffeeBean3D` (signature band) — parked when off-screen, mouse-only lean plus a lightly-damped touch
+  drag, one still frame under reduced-motion (see the 3D section below).
 - The global reduced-motion block is the safety net: it also parks the hero/copy/story transforms and removes the card lift.
 
 ## 3D coffee bean (signature band)
@@ -102,16 +102,21 @@ Every moving piece is opt-in on the visitor's side — check these before adding
 - **three.js is kept out of the way twice**: it is never in the main bundle (dynamic `import('three')` → its
   own chunk) and never fetched before the visitor scrolls near the band (an IntersectionObserver gate).
   Keep it that way — a static import puts it in the first paint and competes with the hero video.
-- The mesh is generated, not downloaded: one `SphereGeometry` reshaped in `beanGeometry()` — stretched along
-  its long axis, then dented by a longitudinal furrow that fades out at both ends. That dent *is* the crease
-  a bean is recognised by, so there is no model file to fetch. Re-tuning those constants changes the
-  silhouette; nothing is faked with a CSS shape or an image.
+- The mesh is generated, not downloaded: one `SphereGeometry` reshaped in `beanGeometry()` to
+  1 : 0.72 : 0.5 (length : width : thickness), then dented by the crease a bean is recognised by.
+  The crease is not a straight seam — it **bends across the face** as it travels the length (`bend`) and
+  fades out at both tips (`1 - x * x`), the way the groove on a real bean behaves. So there is no model
+  file to fetch. Re-tuning those constants changes the silhouette; nothing is faked with a CSS shape.
 - `data-state` on `.bean3d` reports the fallback ladder: `idle` (band still far away) → `loading` →
   `live` | `static` | `fallback`. `fallback` (no WebGL, or the module failed) hides the stage, so the band
   renders as copy alone instead of a broken box.
 - The loop is parked by an IntersectionObserver whenever the band leaves the viewport, spins only while
   `prefers-reduced-motion` is off (there it draws a single still frame — `static`), leans toward the pointer
   on mouse + desktop only (the same gate as the rest of the site), and caps devicePixelRatio at 2.
+- Touch is answered with a drag rather than the mouse lean: a horizontal sweep turns the bean (clamped to
+  ~half a turn), the finger's movement is eased in and out instead of followed 1:1, and on release the
+  offset eases back to 0 so the steady spin resumes. Vertical scrolling always wins — the canvas carries
+  `touch-action: pan-y` — and `data-drag="active"` marks the wrapper while a finger is turning it.
 - Verifying it actually turns: `canvas.toDataURL()` is useless here (no `preserveDrawingBuffer`). Read the
   WebGL pixels **inside a nested `requestAnimationFrame` callback** — that runs after three's draw in the
   same batch, while the buffer is still valid — and compare a brightness signature ~1.5s apart; an equal
